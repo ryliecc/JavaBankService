@@ -30,4 +30,10 @@ public class BankService {
         this.allAccounts = allAccounts;
     }
 
+    @Override
+    public String toString() {
+        return "BankService{" +
+                "allAccounts=" + allAccounts +
+                '}';
+    }
 }
