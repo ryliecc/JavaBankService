@@ -1,2 +1,2 @@
-public record Client(String firstName, String lastName, int customerNumber) {
+public record Client(String firstName, String lastName, int customerId) {
 }
