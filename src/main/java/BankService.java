@@ -16,6 +16,18 @@ public class BankService {
         return newAccountId;
     }
 
+    String createNewAccount(Map<Integer, Client> clients){
+        StringBuilder accountId = new StringBuilder("DE");
+        Random rand = new Random();
+        for(int i = 1; i < 21; i++){
+            int random = rand.nextInt(10);
+            accountId.append(random);
+        }
+        String newAccountId = accountId.toString();
+        allAccounts.put(newAccountId, new Account(newAccountId, new BigDecimal("0"), clients));
+        return newAccountId;
+    }
+
     void transferMoney(String sendingAccountId, String receivingAccountId, BigDecimal money){
         Account sendingAccount = allAccounts.get(sendingAccountId);
         Account receivingAccount = allAccounts.get(receivingAccountId);
