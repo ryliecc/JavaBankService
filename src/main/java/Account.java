@@ -1,11 +1,12 @@
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class Account {
     String accountId;
     BigDecimal balance;
-    Map<Integer, Client> owners;
+    List<Client> owners;
     Client owner;
 
 
@@ -23,7 +24,7 @@ public class Account {
         this.owner = owner;
     }
 
-    public Account(String accountId, BigDecimal balance, Map<Integer, Client> owners) {
+    public Account(String accountId, BigDecimal balance, List<Client> owners) {
         this.accountId = accountId;
         this.balance = balance;
         this.owners = owners;
@@ -45,11 +46,11 @@ public class Account {
         this.accountId = accountId;
     }
 
-    public Map<Integer, Client> getOwner() {
+    public List<Client> getOwner() {
         return owners;
     }
 
-    public void setOwner(Map<Integer, Client> owner) {
+    public void setOwner(List<Client> owner) {
         this.owners = owner;
     }
 
@@ -71,7 +72,8 @@ public class Account {
         return "Account{" +
                 "accountId='" + accountId + '\'' +
                 ", balance=" + balance +
-                ", client=" + owner +
+                ", owners=" + owners +
+                ", owner=" + owner +
                 '}';
     }
 }

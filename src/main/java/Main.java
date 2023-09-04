@@ -1,5 +1,7 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -13,8 +15,8 @@ public class Main {
         Account max = new Account("DE37253826382638254016", new BigDecimal("18653.43"), c3);
 
         Map<String, Account> allAccounts = new HashMap<>();
-        allAccounts.put(String.valueOf(c1.customerId()), michael);
-        allAccounts.put(String.valueOf(c2.customerId()), max);
+        allAccounts.put(michael.accountId, michael);
+        allAccounts.put(max.accountId, max);
 
         BankService bankService = new BankService(allAccounts);
         System.out.println(bankService.createNewAccount(c2));
@@ -26,10 +28,17 @@ public class Main {
 
         Client c4 = new Client("Sarah", "Hufnagel", 25283);
         Client c5 = new Client("Lisa", "Schmied", 25183);
-        Map<Integer, Client> sarahAndLisa = new HashMap<>();
-        sarahAndLisa.put(c4.customerId(), c4);
-        sarahAndLisa.put(c5.customerId(), c5);
-        Account sharedSarahAndLisa = new Account("DE36291638263919352739", new BigDecimal("3712.23"), sarahAndLisa);
+        List<Client> sarahAndLisa = new ArrayList<>();
+        sarahAndLisa.add(c4);
+        sarahAndLisa.add(c5);
+        bankService.createNewAccount(sarahAndLisa);
+        System.out.println(allAccounts);
+
+        Account lisaAndSarah = new Account("DE32583538429354926382", new BigDecimal("200.09"), sarahAndLisa);
+        allAccounts.put(lisaAndSarah.accountId, lisaAndSarah);
+
+        System.out.println(bankService.splitAccount(lisaAndSarah.accountId));
+        System.out.println(allAccounts);
 
     }
 }

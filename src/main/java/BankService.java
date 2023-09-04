@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class BankService {
@@ -16,7 +17,7 @@ public class BankService {
         return newAccountId;
     }
 
-    String createNewAccount(Map<Integer, Client> clients){
+    String createNewAccount(List<Client> clients){
         StringBuilder accountId = new StringBuilder("DE");
         Random rand = new Random();
         for(int i = 1; i < 21; i++){
@@ -33,6 +34,27 @@ public class BankService {
         Account receivingAccount = allAccounts.get(receivingAccountId);
         sendingAccount.withdrawMoney(money);
         receivingAccount.depositMoney(money);
+    }
+
+    public List<String> splitAccount(String accountId){
+        Account sharedAccount = allAccounts.get(accountId);
+        List<Client> owners = sharedAccount.owners;
+
+        BigDecimal amountOwners = BigDecimal.valueOf(owners.size());
+        BigDecimal moneyEach = sharedAccount.balance.divide(amountOwners).setScale(2, RoundingMode.HALF_DOWN);
+        BigDecimal moneyWithdrawn = moneyEach.multiply(amountOwners);
+        sharedAccount.withdrawMoney(moneyWithdrawn);
+
+        List<String> newAccountIds = new ArrayList<>();
+
+        for(int i = 0; i < owners.size(); i++){
+            Client owner = owners.get(i);
+            String newAccountId = createNewAccount(owner);
+            Account newAccount = allAccounts.get(newAccountId);
+            newAccount.depositMoney(moneyEach);
+            newAccountIds.add(newAccountId);
+        }
+        return newAccountIds;
     }
 
     public BankService(Map<String, Account> allAccounts) {
