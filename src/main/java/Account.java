@@ -5,4 +5,12 @@ public class Account {
     BigDecimal balance;
     Client client;
 
+    void depositMoney(BigDecimal money){
+        balance = balance.add(money);
+    }
+
+    void withdrawMoney(BigDecimal money){
+        balance = balance.subtract(money);
+    }
+
 }
