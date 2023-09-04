@@ -1,10 +1,8 @@
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class BankService {
-    List<Account> allAccounts = new ArrayList<>();
+    Map<String, Account> allAccounts;
 
     String createNewAccount(Client client){
         StringBuilder accountId = new StringBuilder("DE");
@@ -14,20 +12,40 @@ public class BankService {
             accountId.append(random);
         }
         String newAccountId = accountId.toString();
-        allAccounts.add(new Account(newAccountId, new BigDecimal("0"), client));
-        return accountId.toString();
+        allAccounts.put(newAccountId, new Account(newAccountId, new BigDecimal("0"), client));
+        return newAccountId;
     }
 
-    public BankService(List<Account> allAccounts) {
+    void transferMoney(String sendingAccountId, String receivingAccountId, BigDecimal money){
+        Account sendingAccount = allAccounts.get(sendingAccountId);
+        Account receivingAccount = allAccounts.get(receivingAccountId);
+        sendingAccount.withdrawMoney(money);
+        receivingAccount.depositMoney(money);
+    }
+
+    public BankService(Map<String, Account> allAccounts) {
         this.allAccounts = allAccounts;
     }
 
-    public List<Account> getAllAccounts() {
+    public Map<String, Account> getAllAccounts() {
         return allAccounts;
     }
 
-    public void setAllAccounts(List<Account> allAccounts) {
+    public void setAllAccounts(Map<String, Account> allAccounts) {
         this.allAccounts = allAccounts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankService that = (BankService) o;
+        return Objects.equals(allAccounts, that.allAccounts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(allAccounts);
     }
 
     @Override
